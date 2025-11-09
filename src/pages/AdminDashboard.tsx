@@ -11,7 +11,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
-import { Shield, BookOpen, GraduationCap, CheckCircle, XCircle, Clock } from "lucide-react";
+import { Shield, BookOpen, GraduationCap, CheckCircle, XCircle, Clock, UserCheck } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
 
 const AdminDashboard = () => {
@@ -81,6 +81,33 @@ const AdminDashboard = () => {
       );
       
       return resourcesWithProfiles;
+    },
+  });
+
+  // Fetch pending admin requests
+  const { data: adminRequests, refetch: refetchAdminRequests } = useQuery({
+    queryKey: ["admin-requests"],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("admin_requests")
+        .select("*")
+        .eq("status", "pending")
+        .order("created_at", { ascending: false });
+      if (error) throw error;
+      
+      // Fetch requester profiles
+      const requestsWithProfiles = await Promise.all(
+        (data || []).map(async (request) => {
+          const { data: profile } = await supabase
+            .from("profiles")
+            .select("first_name, last_name, email")
+            .eq("id", request.user_id)
+            .single();
+          return { ...request, requester: profile };
+        })
+      );
+      
+      return requestsWithProfiles;
     },
   });
 
@@ -210,6 +237,57 @@ const AdminDashboard = () => {
     }
   };
 
+  const handleApproveAdminRequest = async (requestId: string, userId: string) => {
+    try {
+      // Add admin role
+      const { error: roleError } = await supabase
+        .from("user_roles")
+        .insert({
+          user_id: userId,
+          role: "admin",
+        });
+
+      if (roleError) throw roleError;
+
+      // Update request status
+      const { error: requestError } = await supabase
+        .from("admin_requests")
+        .update({
+          status: "approved",
+          reviewed_by: user?.id,
+          reviewed_at: new Date().toISOString(),
+        })
+        .eq("id", requestId);
+
+      if (requestError) throw requestError;
+
+      toast({ title: "Success", description: "Admin access granted" });
+      refetchAdminRequests();
+    } catch (error: any) {
+      toast({ variant: "destructive", title: "Error", description: error.message });
+    }
+  };
+
+  const handleRejectAdminRequest = async (requestId: string) => {
+    try {
+      const { error } = await supabase
+        .from("admin_requests")
+        .update({
+          status: "rejected",
+          reviewed_by: user?.id,
+          reviewed_at: new Date().toISOString(),
+        })
+        .eq("id", requestId);
+
+      if (error) throw error;
+
+      toast({ title: "Request rejected", description: "User will be notified" });
+      refetchAdminRequests();
+    } catch (error: any) {
+      toast({ variant: "destructive", title: "Error", description: error.message });
+    }
+  };
+
   return (
     <div className="min-h-screen bg-background">
       <Navbar />
@@ -224,7 +302,11 @@ const AdminDashboard = () => {
           <TabsList>
             <TabsTrigger value="approvals" className="flex items-center gap-2">
               <Clock className="w-4 h-4" />
-              Pending Approvals ({pendingResources?.length || 0})
+              Resource Approvals ({pendingResources?.length || 0})
+            </TabsTrigger>
+            <TabsTrigger value="admin-requests" className="flex items-center gap-2">
+              <UserCheck className="w-4 h-4" />
+              Admin Requests ({adminRequests?.length || 0})
             </TabsTrigger>
             <TabsTrigger value="courses" className="flex items-center gap-2">
               <GraduationCap className="w-4 h-4" />
@@ -285,6 +367,57 @@ const AdminDashboard = () => {
                         onClick={() => window.open(resource.file_url, "_blank")}
                       >
                         View File
+                      </Button>
+                    </div>
+                  </CardContent>
+                </Card>
+              ))
+            )}
+          </TabsContent>
+
+          {/* Admin Requests Tab */}
+          <TabsContent value="admin-requests" className="space-y-4">
+            {adminRequests?.length === 0 ? (
+              <Card>
+                <CardContent className="py-8 text-center text-muted-foreground">
+                  No pending admin requests
+                </CardContent>
+              </Card>
+            ) : (
+              adminRequests?.map((request) => (
+                <Card key={request.id}>
+                  <CardHeader>
+                    <CardTitle className="text-lg">
+                      {request.requester?.first_name} {request.requester?.last_name}
+                    </CardTitle>
+                    <CardDescription>
+                      {request.requester?.email} • Requested {new Date(request.created_at).toLocaleDateString()}
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent className="space-y-4">
+                    <div>
+                      <Label className="text-sm font-medium">Reason for Request:</Label>
+                      <p className="text-sm mt-2 p-3 bg-muted rounded-md">
+                        {request.reason}
+                      </p>
+                    </div>
+                    <div className="flex gap-2">
+                      <Button
+                        size="sm"
+                        onClick={() => handleApproveAdminRequest(request.id, request.user_id)}
+                        className="flex items-center gap-2"
+                      >
+                        <CheckCircle className="w-4 h-4" />
+                        Approve
+                      </Button>
+                      <Button
+                        size="sm"
+                        variant="destructive"
+                        onClick={() => handleRejectAdminRequest(request.id)}
+                        className="flex items-center gap-2"
+                      >
+                        <XCircle className="w-4 h-4" />
+                        Reject
                       </Button>
                     </div>
                   </CardContent>
