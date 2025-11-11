@@ -1,6 +1,7 @@
 import { useState } from "react";
-import { User, Settings, LogOut, Trash2, Palette } from "lucide-react";
+import { User, Settings, LogOut, Trash2, Palette, Crown } from "lucide-react";
 import ProfileDetailsDialog from "./ProfileDetailsDialog";
+import PricingDialog from "./PricingDialog";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -19,6 +20,7 @@ import { Button } from "@/components/ui/button";
 const ProfileMenu = () => {
   const [theme, setTheme] = useState<"light" | "earth" | "dark">("light");
   const [dialogOpen, setDialogOpen] = useState(false);
+  const [pricingOpen, setPricingOpen] = useState(false);
   const { user, signOut, isAdmin, isStudent } = useAuth();
   const navigate = useNavigate();
 
@@ -58,6 +60,7 @@ const ProfileMenu = () => {
   return (
     <>
       <ProfileDetailsDialog open={dialogOpen} onOpenChange={setDialogOpen} />
+      <PricingDialog open={pricingOpen} onOpenChange={setPricingOpen} />
       <DropdownMenu>
         <DropdownMenuTrigger className="outline-none">
           <Avatar className="w-10 h-10 border-2 border-primary/20 hover:border-primary transition-colors cursor-pointer">
@@ -85,6 +88,11 @@ const ProfileMenu = () => {
         <DropdownMenuItem onClick={() => setDialogOpen(true)} className="cursor-pointer">
           <Settings className="mr-2 h-4 w-4" />
           <span>Change Details</span>
+        </DropdownMenuItem>
+        
+        <DropdownMenuItem onClick={() => setPricingOpen(true)} className="cursor-pointer">
+          <Crown className="mr-2 h-4 w-4 text-amber-500" />
+          <span>Upgrade to Premium</span>
         </DropdownMenuItem>
         
         <DropdownMenuSub>

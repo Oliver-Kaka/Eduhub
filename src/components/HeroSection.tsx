@@ -33,6 +33,12 @@ const HeroSection = () => {
               <Button 
                 size="lg" 
                 className="bg-primary hover:bg-primary/90 text-primary-foreground font-semibold shadow-lg hover:shadow-xl transition-all duration-300"
+                onClick={() => {
+                  document.querySelector('.quick-access-section')?.scrollIntoView({ 
+                    behavior: 'smooth',
+                    block: 'start'
+                  });
+                }}
               >
                 <BookOpen className="mr-2 h-5 w-5" />
                 Get Started
