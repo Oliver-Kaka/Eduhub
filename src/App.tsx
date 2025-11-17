@@ -11,6 +11,7 @@ import AITools from "./pages/AITools";
 import StudyPlan from "./pages/StudyPlan";
 import Resources from "./pages/Resources";
 import SearchResults from "./pages/SearchResults";
+import LearnMore from "./pages/LearnMore";
 import NotFound from "./pages/NotFound";
 import ProtectedRoute from "./components/ProtectedRoute";
 
@@ -31,6 +32,7 @@ const App = () => (
           <Route path="/study-plan" element={<ProtectedRoute><StudyPlan /></ProtectedRoute>} />
           <Route path="/resources" element={<ProtectedRoute><Resources /></ProtectedRoute>} />
           <Route path="/search" element={<ProtectedRoute><SearchResults /></ProtectedRoute>} />
+          <Route path="/learn-more" element={<LearnMore />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>
