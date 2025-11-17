@@ -1,5 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { BookOpen, Target } from "lucide-react";
+import { Link } from "react-router-dom";
 import heroImage from "@/assets/hero-education.jpg";
 
 const HeroSection = () => {
@@ -47,8 +48,11 @@ const HeroSection = () => {
                 size="lg" 
                 variant="outline"
                 className="font-semibold border-2 hover:bg-secondary/50 transition-all duration-300"
+                asChild
               >
-                Learn More
+                <Link to="/learn-more">
+                  Learn More
+                </Link>
               </Button>
             </div>
           </div>
