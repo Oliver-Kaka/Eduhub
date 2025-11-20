@@ -1,12 +1,14 @@
 import { useState, useEffect } from "react";
+import { useSearchParams } from "react-router-dom";
 import Navbar from "@/components/Navbar";
 import FloatingChatButton from "@/components/FloatingChatButton";
 import { supabase } from "@/integrations/supabase/client";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
-import { FileText, Download, Filter, Loader2 } from "lucide-react";
+import { FileText, Download, Filter, Loader2, Search } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import { Input } from "@/components/ui/input";
 
 interface Resource {
   id: string;
@@ -49,16 +51,28 @@ const Resources = () => {
   const [units, setUnits] = useState<Unit[]>([]);
   const [loading, setLoading] = useState(true);
   const { toast } = useToast();
+  const [searchParams, setSearchParams] = useSearchParams();
 
   // Filters
   const [selectedCourse, setSelectedCourse] = useState<string>("all");
   const [selectedUnit, setSelectedUnit] = useState<string>("all");
   const [selectedYear, setSelectedYear] = useState<string>("all");
   const [selectedType, setSelectedType] = useState<string>("all");
+  const [unitQuery, setUnitQuery] = useState<string>("");
 
   useEffect(() => {
     fetchData();
   }, []);
+
+  useEffect(() => {
+    const unitQueryParam = searchParams.get("unitQuery") ?? "";
+    const courseParam = searchParams.get("course") ?? "all";
+    const yearParam = searchParams.get("year") ?? "all";
+
+    setUnitQuery(unitQueryParam);
+    setSelectedCourse(courseParam);
+    setSelectedYear(yearParam);
+  }, [searchParams]);
 
   const fetchData = async () => {
     try {
@@ -118,8 +132,12 @@ const Resources = () => {
     const unitMatch = selectedUnit === "all" || resource.unit_id === selectedUnit;
     const yearMatch = selectedYear === "all" || resource.units.year.toString() === selectedYear;
     const typeMatch = selectedType === "all" || resource.resource_type === selectedType;
+    const unitQueryMatch =
+      unitQuery.trim() === "" ||
+      resource.units.unit_code.toLowerCase().includes(unitQuery.trim().toLowerCase()) ||
+      resource.units.unit_name.toLowerCase().includes(unitQuery.trim().toLowerCase());
 
-    return courseMatch && unitMatch && yearMatch && typeMatch;
+    return courseMatch && unitMatch && yearMatch && typeMatch && unitQueryMatch;
   });
 
   const uniqueYears = Array.from(new Set(units.map(u => u.year))).sort();
@@ -133,6 +151,8 @@ const Resources = () => {
     setSelectedUnit("all");
     setSelectedYear("all");
     setSelectedType("all");
+    setUnitQuery("");
+    setSearchParams({});
   };
 
   const handleDownload = (url: string, title: string) => {
@@ -182,6 +202,18 @@ const Resources = () => {
             </CardHeader>
             <CardContent>
               <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-4">
+                <div className="space-y-2 md:col-span-2">
+                  <label className="text-sm font-medium text-foreground">Unit code or name</label>
+                  <div className="relative">
+                    <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                    <Input
+                      value={unitQuery}
+                      onChange={(e) => setUnitQuery(e.target.value)}
+                      placeholder="e.g., CS101 or Data Structures"
+                      className="pl-9"
+                    />
+                  </div>
+                </div>
                 <div className="space-y-2">
                   <label className="text-sm font-medium text-foreground">Course</label>
                   <Select value={selectedCourse} onValueChange={setSelectedCourse}>

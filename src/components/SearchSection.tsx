@@ -21,14 +21,15 @@ const SearchSection = () => {
   const [selectedYear, setSelectedYear] = useState("");
 
   const handleSearch = () => {
-    if (searchQuery.trim()) {
-      navigate(`/search?q=${encodeURIComponent(searchQuery.trim())}`);
+    const trimmed = searchQuery.trim();
+    if (trimmed) {
+      navigate(`/resources?unitQuery=${encodeURIComponent(trimmed)}`);
     }
   };
 
   const handleBrowse = () => {
     if (selectedCourse && selectedYear) {
-      navigate(`/search?course=${selectedCourse}&year=${selectedYear}`);
+      navigate(`/resources?course=${selectedCourse}&year=${selectedYear}`);
     }
   };
 
