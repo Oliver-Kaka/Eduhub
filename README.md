@@ -6,10 +6,9 @@ EduHub is a learning companion built to advance the United Nations Sustainable D
 
 ## 1. Live URLs
 
-- Live Application: _Replace with your deployed URL_ (for example, `https://eduhub.app`)
-- Pitch Deck: _Replace with the link to your presentation deck_
+- Live Application: https://eduhub-plp.netlify.app/
+- Pitch Deck: [Canva design](https://www.canva.com/design/DAG5Pab8SwM/bR_9Oe_RBme-4Hv3ioTOxw/edit?utm_content=DAG5Pab8SwM&utm_campaign=designshare&utm_medium=link2&utm_source=sharebutton)
 
-> Update the placeholders above with the actual links once they are ready.
 
 ## 2. Features of the App
 
@@ -31,5 +30,5 @@ EduHub is a learning companion built to advance the United Nations Sustainable D
 ## 4. Contact Info
 
 - Email: [oliverkaka715@gmail.com](mailto:oliverkaka715@gmail.com)
-- LinkedIn: _Add your LinkedIn profile link here_
+- LinkedIn: [Oliver Kaka](https://www.linkedin.com/in/oliver-kaka-maganga)
 - Phone: [+254 702 833 485](tel:+254702833485)
