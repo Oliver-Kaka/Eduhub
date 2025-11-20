@@ -1,8 +1,11 @@
 import { Button } from "@/components/ui/button";
 import { BookOpen, Target } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 import heroImage from "@/assets/hero-education.jpg";
 
 const HeroSection = () => {
+  const navigate = useNavigate();
+
   return (
     <section className="relative overflow-hidden bg-gradient-to-br from-primary/5 via-background to-accent/5 pt-24 pb-16">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -47,6 +50,7 @@ const HeroSection = () => {
                 size="lg" 
                 variant="outline"
                 className="font-semibold border-2 hover:bg-secondary/50 transition-all duration-300"
+                onClick={() => navigate("/learn-more")}
               >
                 Learn More
               </Button>
