@@ -1,10 +1,11 @@
-import { useState } from "react";
-import { Link } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { Link, useLocation } from "react-router-dom";
 import { GraduationCap } from "lucide-react";
 import ProfileMenu from "./ProfileMenu";
 
 const Navbar = () => {
   const [activeLink, setActiveLink] = useState("Home");
+  const location = useLocation();
 
   const navLinks = [
     { name: "Home", href: "/" },
@@ -12,6 +13,11 @@ const Navbar = () => {
     { name: "AI Tools", href: "/ai-tools" },
     { name: "Study Plan", href: "/study-plan" },
   ];
+
+  useEffect(() => {
+    const current = navLinks.find((link) => location.pathname === link.href);
+    setActiveLink(current?.name ?? "");
+  }, [location.pathname]);
 
   return (
     <nav className="fixed top-0 left-0 right-0 z-50 bg-card/80 backdrop-blur-md border-b border-border">
