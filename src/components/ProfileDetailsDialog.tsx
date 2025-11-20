@@ -13,9 +13,14 @@ import { useAuth } from "@/hooks/useAuth";
 interface ProfileDetailsDialogProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
+  onProfileImageUpdate?: (imageUrl: string | null) => void;
 }
 
-const ProfileDetailsDialog = ({ open, onOpenChange }: ProfileDetailsDialogProps) => {
+const ProfileDetailsDialog = ({
+  open,
+  onOpenChange,
+  onProfileImageUpdate,
+}: ProfileDetailsDialogProps) => {
   const { user, isAdmin } = useAuth();
   const { toast } = useToast();
   const [loading, setLoading] = useState(false);
@@ -42,9 +47,9 @@ const ProfileDetailsDialog = ({ open, onOpenChange }: ProfileDetailsDialogProps)
         .single();
 
       if (error) throw error;
-      if (data?.profile_image) {
-        setProfileImageUrl(data.profile_image);
-      }
+      const imageUrl = data?.profile_image ?? "";
+      setProfileImageUrl(imageUrl);
+      onProfileImageUpdate?.(imageUrl || null);
     } catch (error: any) {
       console.error("Error fetching profile:", error);
     }
@@ -109,6 +114,7 @@ const ProfileDetailsDialog = ({ open, onOpenChange }: ProfileDetailsDialogProps)
         if (error) throw error;
 
         setProfileImageUrl(base64String);
+        onProfileImageUpdate?.(base64String);
         toast({
           title: "Success",
           description: "Profile photo updated successfully",

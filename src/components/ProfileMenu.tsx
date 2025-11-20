@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { User, Settings, LogOut, Trash2, Palette, Crown } from "lucide-react";
 import ProfileDetailsDialog from "./ProfileDetailsDialog";
 import PricingDialog from "./PricingDialog";
@@ -16,6 +16,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useAuth } from "@/hooks/useAuth";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
+import { supabase } from "@/integrations/supabase/client";
 
 const ProfileMenu = () => {
   const [theme, setTheme] = useState<"light" | "earth" | "dark">("light");
@@ -23,6 +24,39 @@ const ProfileMenu = () => {
   const [pricingOpen, setPricingOpen] = useState(false);
   const { user, signOut, isAdmin, isStudent } = useAuth();
   const navigate = useNavigate();
+  const [profileImageUrl, setProfileImageUrl] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (!user) {
+      setProfileImageUrl(null);
+      return;
+    }
+
+    let isMounted = true;
+
+    const fetchProfileImage = async () => {
+      try {
+        const { data, error } = await supabase
+          .from("profiles")
+          .select("profile_image")
+          .eq("id", user.id)
+          .maybeSingle();
+
+        if (error) throw error;
+        if (isMounted) {
+          setProfileImageUrl(data?.profile_image ?? null);
+        }
+      } catch (error) {
+        console.error("Error fetching profile image:", error);
+      }
+    };
+
+    fetchProfileImage();
+
+    return () => {
+      isMounted = false;
+    };
+  }, [user]);
 
   const handleThemeChange = (newTheme: "light" | "earth" | "dark") => {
     setTheme(newTheme);
@@ -59,12 +93,19 @@ const ProfileMenu = () => {
 
   return (
     <>
-      <ProfileDetailsDialog open={dialogOpen} onOpenChange={setDialogOpen} />
+      <ProfileDetailsDialog 
+        open={dialogOpen} 
+        onOpenChange={setDialogOpen} 
+        onProfileImageUpdate={setProfileImageUrl}
+      />
       <PricingDialog open={pricingOpen} onOpenChange={setPricingOpen} />
       <DropdownMenu>
         <DropdownMenuTrigger className="outline-none">
           <Avatar className="w-10 h-10 border-2 border-primary/20 hover:border-primary transition-colors cursor-pointer">
-            <AvatarImage src="/placeholder.svg" alt="User" />
+            <AvatarImage 
+              src={profileImageUrl || user.user_metadata?.avatar_url || "/placeholder.svg"} 
+              alt={user.email ?? "User"} 
+            />
             <AvatarFallback className="bg-primary text-primary-foreground">
               <User className="w-5 h-5" />
             </AvatarFallback>
