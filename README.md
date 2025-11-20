@@ -1,73 +1,35 @@
-# Welcome to your Lovable project
+# EduHub
 
-## Project info
+## 0. Brief Introduction
 
-**URL**: https://lovable.dev/projects/f7a88867-05e1-4a6c-bf50-52c8021c6401
+EduHub is a learning companion built to advance the United Nations Sustainable Development Goal 4 (Quality Education). By combining AI assistance, collaborative resources, and personalized study plans, the platform helps learners access equitable, high-quality education anytime.
 
-## How can I edit this code?
+## 1. Live URLs
 
-There are several ways of editing your application.
+- Live Application: _Replace with your deployed URL_ (for example, `https://eduhub.app`)
+- Pitch Deck: _Replace with the link to your presentation deck_
 
-**Use Lovable**
+> Update the placeholders above with the actual links once they are ready.
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/f7a88867-05e1-4a6c-bf50-52c8021c6401) and start prompting.
+## 2. Features of the App
 
-Changes made via Lovable will be committed automatically to this repo.
+- AI-powered study tools such as note summarization, presentation generation, quiz building, and flashcard creation.
+- Collaborative resource library where students and mentors upload, browse, and share study materials.
+- Smart study-plan generator that tailors schedules to personal goals and syncs with Google Calendar.
+- 24/7 AI study assistant chatbot that answers questions, explains concepts, and keeps learners motivated.
+- Coming soon: an advanced presentation builder, Podcast Mode for audio-first study, and more integrations that keep pushing the learning experience forward.
 
-**Use your preferred IDE**
+## 3. Technologies Used
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
+- React + TypeScript (Vite)
+- Node.js & Express
+- MongoDB
+- Supabase
+- Tailwind CSS & shadcn/ui
+- Lucide Icons and additional supporting libraries
 
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
+## 4. Contact Info
 
-Follow these steps:
-
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
-
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
-
-# Step 3: Install the necessary dependencies.
-npm i
-
-# Step 4: Start the development server with auto-reloading and an instant preview.
-npm run dev
-```
-
-**Edit a file directly in GitHub**
-
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
-
-**Use GitHub Codespaces**
-
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
-
-## What technologies are used for this project?
-
-This project is built with:
-
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
-
-## How can I deploy this project?
-
-Simply open [Lovable](https://lovable.dev/projects/f7a88867-05e1-4a6c-bf50-52c8021c6401) and click on Share -> Publish.
-
-## Can I connect a custom domain to my Lovable project?
-
-Yes, you can!
-
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
-
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/features/custom-domain#custom-domain)
+- Email: [oliverkaka715@gmail.com](mailto:oliverkaka715@gmail.com)
+- LinkedIn: _Add your LinkedIn profile link here_
+- Phone: [+254 702 833 485](tel:+254702833485)
