@@ -8,7 +8,7 @@ const Navbar = () => {
   const location = useLocation();
 
   const navLinks = [
-    { name: "Home", href: "/" },
+    { name: "Home", href: "/dashboard" },
     { name: "Resources", href: "/resources" },
     { name: "AI Tools", href: "/ai-tools" },
     { name: "Study Plan", href: "/study-plan" },
