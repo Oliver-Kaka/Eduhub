@@ -44,7 +44,7 @@ const HeroSection = () => {
                 }}
               >
                 <BookOpen className="mr-2 h-5 w-5" />
-                Get Started
+                Explore
               </Button>
               <Button 
                 size="lg" 
