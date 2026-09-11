@@ -1,9 +1,10 @@
 import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Checkbox } from "@/components/ui/checkbox";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useToast } from "@/hooks/use-toast";
@@ -14,6 +15,8 @@ const Auth = () => {
   const [password, setPassword] = useState("");
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
+  const [acceptTerms, setAcceptTerms] = useState(false);
+  const [acceptPrivacy, setAcceptPrivacy] = useState(false);
   const [loading, setLoading] = useState(false);
   const [user, setUser] = useState<User | null>(null);
   const navigate = useNavigate();
@@ -43,6 +46,14 @@ const Auth = () => {
 
   const handleSignUp = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (!acceptTerms || !acceptPrivacy) {
+      toast({
+        variant: "destructive",
+        title: "Agreement required",
+        description: "You must accept both the Terms and Conditions and the Privacy Policy to create an account.",
+      });
+      return;
+    }
     setLoading(true);
 
     try {
@@ -70,6 +81,8 @@ const Auth = () => {
       setPassword("");
       setFirstName("");
       setLastName("");
+      setAcceptTerms(false);
+      setAcceptPrivacy(false);
     } catch (error: any) {
       toast({
         variant: "destructive",
@@ -203,7 +216,37 @@ const Auth = () => {
                     minLength={6}
                   />
                 </div>
-                <Button type="submit" className="w-full" disabled={loading}>
+                <div className="space-y-3 pt-2">
+                  <div className="flex items-start gap-2">
+                    <Checkbox
+                      id="accept-terms"
+                      checked={acceptTerms}
+                      onCheckedChange={(v) => setAcceptTerms(v === true)}
+                      className="mt-0.5"
+                    />
+                    <Label htmlFor="accept-terms" className="text-sm font-normal leading-snug cursor-pointer">
+                      I agree to the{" "}
+                      <Link to="/terms" target="_blank" className="text-primary underline underline-offset-2">
+                        Terms and Conditions
+                      </Link>
+                    </Label>
+                  </div>
+                  <div className="flex items-start gap-2">
+                    <Checkbox
+                      id="accept-privacy"
+                      checked={acceptPrivacy}
+                      onCheckedChange={(v) => setAcceptPrivacy(v === true)}
+                      className="mt-0.5"
+                    />
+                    <Label htmlFor="accept-privacy" className="text-sm font-normal leading-snug cursor-pointer">
+                      I agree to the{" "}
+                      <Link to="/privacy" target="_blank" className="text-primary underline underline-offset-2">
+                        Privacy Policy
+                      </Link>
+                    </Label>
+                  </div>
+                </div>
+                <Button type="submit" className="w-full" disabled={loading || !acceptTerms || !acceptPrivacy}>
                   {loading ? "Creating account..." : "Sign Up"}
                 </Button>
                 <p className="text-xs text-muted-foreground text-center">

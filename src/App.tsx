@@ -13,6 +13,8 @@ import StudyPlan from "./pages/StudyPlan";
 import Resources from "./pages/Resources";
 import SearchResults from "./pages/SearchResults";
 import LearnMore from "./pages/LearnMore";
+import Privacy from "./pages/Privacy";
+import Terms from "./pages/Terms";
 import NotFound from "./pages/NotFound";
 import ProtectedRoute from "./components/ProtectedRoute";
 
@@ -28,6 +30,8 @@ const App = () => (
             <Route path="/" element={<Landing />} />
             <Route path="/auth" element={<Auth />} />
             <Route path="/learn-more" element={<LearnMore />} />
+            <Route path="/privacy" element={<Privacy />} />
+            <Route path="/terms" element={<Terms />} />
             <Route path="/dashboard" element={<ProtectedRoute><Index /></ProtectedRoute>} />
             <Route path="/student" element={<ProtectedRoute><StudentDashboard /></ProtectedRoute>} />
             <Route path="/admin" element={<ProtectedRoute><AdminDashboard /></ProtectedRoute>} />
