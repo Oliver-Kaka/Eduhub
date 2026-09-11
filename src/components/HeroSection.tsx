@@ -68,16 +68,6 @@ const HeroSection = () => {
               <div className="absolute inset-0 bg-gradient-to-t from-primary/20 to-transparent" />
             </div>
             
-            {/* Floating Stats */}
-            <div className="absolute -bottom-6 -left-6 bg-card p-6 rounded-xl shadow-xl border border-border animate-fade-in-up" style={{ animationDelay: "0.2s" }}>
-              <div className="text-3xl font-bold text-primary">10k+</div>
-              <div className="text-sm text-muted-foreground">Active Learners</div>
-            </div>
-            
-            <div className="absolute -top-6 -right-6 bg-card p-6 rounded-xl shadow-xl border border-border animate-fade-in-up" style={{ animationDelay: "0.4s" }}>
-              <div className="text-3xl font-bold text-accent">500+</div>
-              <div className="text-sm text-muted-foreground">Courses Available</div>
-            </div>
           </div>
         </div>
       </div>
