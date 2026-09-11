@@ -216,7 +216,37 @@ const Auth = () => {
                     minLength={6}
                   />
                 </div>
-                <Button type="submit" className="w-full" disabled={loading}>
+                <div className="space-y-3 pt-2">
+                  <div className="flex items-start gap-2">
+                    <Checkbox
+                      id="accept-terms"
+                      checked={acceptTerms}
+                      onCheckedChange={(v) => setAcceptTerms(v === true)}
+                      className="mt-0.5"
+                    />
+                    <Label htmlFor="accept-terms" className="text-sm font-normal leading-snug cursor-pointer">
+                      I agree to the{" "}
+                      <Link to="/terms" target="_blank" className="text-primary underline underline-offset-2">
+                        Terms and Conditions
+                      </Link>
+                    </Label>
+                  </div>
+                  <div className="flex items-start gap-2">
+                    <Checkbox
+                      id="accept-privacy"
+                      checked={acceptPrivacy}
+                      onCheckedChange={(v) => setAcceptPrivacy(v === true)}
+                      className="mt-0.5"
+                    />
+                    <Label htmlFor="accept-privacy" className="text-sm font-normal leading-snug cursor-pointer">
+                      I agree to the{" "}
+                      <Link to="/privacy" target="_blank" className="text-primary underline underline-offset-2">
+                        Privacy Policy
+                      </Link>
+                    </Label>
+                  </div>
+                </div>
+                <Button type="submit" className="w-full" disabled={loading || !acceptTerms || !acceptPrivacy}>
                   {loading ? "Creating account..." : "Sign Up"}
                 </Button>
                 <p className="text-xs text-muted-foreground text-center">
