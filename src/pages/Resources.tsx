@@ -367,7 +367,7 @@ const Resources = () => {
                         </p>
                       )}
                       <Button
-                        onClick={() => handleDownload(resource.file_url, resource.title)}
+                        onClick={() => handleDownload(resource)}
                         className="w-full"
                         size="sm"
                       >
