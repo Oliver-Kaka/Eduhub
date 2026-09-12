@@ -9,6 +9,7 @@ import { Button } from "@/components/ui/button";
 import { FileText, Download, Filter, Loader2, Search } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { Input } from "@/components/ui/input";
+import { recordRecentAccess } from "@/lib/recentAccess";
 
 interface Resource {
   id: string;
@@ -155,11 +156,20 @@ const Resources = () => {
     setSearchParams({});
   };
 
-  const handleDownload = (url: string, title: string) => {
-    window.open(url, '_blank');
+  const handleDownload = (resource: Resource) => {
+    recordRecentAccess({
+      courseCode: resource.units.courses.course_code,
+      courseName: resource.units.courses.course_name,
+      unitCode: resource.units.unit_code,
+      unitName: resource.units.unit_name,
+      year: resource.units.year,
+      courseId: resource.units.course_id,
+      link: `/resources?course=${resource.units.course_id}`,
+    });
+    window.open(resource.file_url, '_blank');
     toast({
       title: "Download Started",
-      description: `Downloading ${title}`,
+      description: `Downloading ${resource.title}`,
     });
   };
 
