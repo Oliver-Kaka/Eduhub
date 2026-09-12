@@ -1,21 +1,43 @@
-import { BookOpen, Bot, Calendar } from "lucide-react";
+import { useState, useEffect } from "react";
+import { BookOpen, Bot, Calendar, Sparkles } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import aiToolsImage from "@/assets/ai-tools.jpg";
 import studyPlanImage from "@/assets/study-plan.jpg";
+import { getRecentAccess, type RecentAccess } from "@/lib/recentAccess";
 
 const QuickAccessCards = () => {
+  const [recent, setRecent] = useState<RecentAccess | null>(null);
+
+  useEffect(() => {
+    setRecent(getRecentAccess());
+  }, []);
+
+  const recentLabel = recent
+    ? recent.unitCode
+      ? `${recent.unitCode} - ${recent.unitName}`
+      : `${recent.courseCode} - ${recent.courseName}`
+    : "Discover latest resources";
+
+  const recentDesc = recent
+    ? recent.unitCode
+      ? `Year ${recent.year ?? ""} · ${recent.courseCode}`.trim()
+      : `Year ${recent.year ?? ""}`.trim()
+    : "Browse newly approved study materials";
+
+  const recentButton = recent ? "Continue learning" : "Discover resources";
+
   const cards = [
     {
-      title: "Recent Course",
-      description: "Continue where you left off",
-      icon: BookOpen,
+      title: recent ? "Recent Course" : "Discover Resources",
+      description: recentDesc,
+      icon: recent ? BookOpen : Sparkles,
       image: null,
-      buttonText: "CS301 - Data Structures",
+      buttonText: recentButton,
       gradient: "from-primary/10 to-accent/10",
       delay: "0s",
-      link: "/student",
+      link: recent?.link ?? "/resources",
     },
     {
       title: "AI Tools",
@@ -99,6 +121,12 @@ const QuickAccessCards = () => {
                         </li>
                       ))}
                     </ul>
+                  )}
+
+                  {!card.features && recent && index === 0 && (
+                    <p className="text-sm font-medium text-primary truncate">
+                      {recentLabel}
+                    </p>
                   )}
                   
                   <Link to={card.link}>
