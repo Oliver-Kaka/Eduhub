@@ -13,6 +13,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { useNavigate } from "react-router-dom";
+import { recordRecentAccess } from "@/lib/recentAccess";
 
 const SearchSection = () => {
   const navigate = useNavigate();
@@ -29,6 +30,16 @@ const SearchSection = () => {
 
   const handleBrowse = () => {
     if (selectedCourse && selectedYear) {
+      const course = courses?.find((c) => c.id === selectedCourse);
+      if (course) {
+        recordRecentAccess({
+          courseCode: course.course_code,
+          courseName: course.course_name,
+          year: parseInt(selectedYear),
+          courseId: course.id,
+          link: `/resources?course=${selectedCourse}&year=${selectedYear}`,
+        });
+      }
       navigate(`/resources?course=${selectedCourse}&year=${selectedYear}`);
     }
   };
